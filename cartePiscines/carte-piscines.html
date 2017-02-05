@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Piscines</title>
+		<link href='https://api.mapbox.com/mapbox-gl-js/v0.32.1/mapbox-gl.css' rel='stylesheet' />
+		<link href="https://fonts.googleapis.com/css?family=Titillium+Web" rel="stylesheet">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+
+	<body>
+		<div class="container">
+			<div id="header">
+				<h1>Piscines à proximité</h1>
+			</div>
+
+			<div class="centerText">
+				<button id="buttonLoc" type="button">Localisation</button>
+			</div>
+			<div class="map-container">
+				<div id="map"></div>
+			</div>
+
+
+
+			<div>
+				Copyright &copy; 2017 Tous droits réservés.
+			</div>
+
+		</div>
+
+		<script src='https://api.mapbox.com/mapbox-gl-js/v0.32.1/mapbox-gl.js'></script>
+
+		<script>
+			mapboxgl.accessToken = 'pk.eyJ1Ijoibmlja2J5ZDE3IiwiYSI6ImNpeXJycDRxdDAwMmkyd25za2pwZXI2bmEifQ.iBK9EHlBaS6k_iswEx0AFw';
+			var map = new mapboxgl.Map({
+			container: 'map',
+			center: [-73.803674, 45.554447],
+  		zoom: 9.4,
+			style: 'mapbox://styles/nickbyd17/ciyrsdnz300392rpdbbeou9ka'});
+
+			map.on('load', function(){
+
+			    map.addSource("piscines", {
+			        type: "geojson",
+			        data : "./piscines.geojson",
+			    });
+
+			    map.addLayer({
+			        "id": "places",
+			        "type": "circle",
+			        "source": "piscines",
+			        "paint": {
+			            "circle-color": '#00F',
+			            "circle-radius": {
+			                'base': 7,
+			                'stops': [[10, 7], [22, 360]]
+			            },
+			            "circle-opacity" : 0.7
+			        }
+			    }, 'waterway-label');
+
+			});
+
+
+			var btn = document.getElementById("buttonLoc");
+			btn.addEventListener("click",function(){
+				console.log("Je te localise ;)");
+				getLocation();
+			});
+
+			function getLocation() {
+			        navigator.geolocation.getCurrentPosition(showPosition);
+			}
+
+			function showPosition(position) {
+				console.log(position.coords.latitude,position.coords.longitude);
+				map.flyTo({
+        center: [
+            position.coords.longitude,
+						position.coords.latitude],
+						zoom : 12.5});
+
+						map.addLayer({
+		         "id": "points",
+		         "type": "symbol",
+		         "source": {
+		             "type": "geojson",
+		             "data": {
+		                 "type": "FeatureCollection",
+		                 "features": [{
+		                     "type": "Feature",
+		                     "geometry": {
+		                         "type": "Point",
+		                         "coordinates": [position.coords.longitude, position.coords.latitude]
+		                     },
+		                     "properties": {
+		                         "icon": "marker",
+		                     }
+		                 }, {
+		                     "type": "Feature",
+		                     "geometry": {
+		                         "type": "Point",
+		                         "coordinates": [-122.414, 37.776]
+		                     },
+		                     "properties": {
+		                         "title": "Mapbox SF",
+		                         "icon": "harbor"
+		                     }
+		                 }]
+		             }
+		         },
+		         "layout": {
+		             "icon-image": "{icon}-15",
+		             "text-field": "{title}",
+		             "text-font": ["Open Sans Semibold", "Arial Unicode MS Bold"],
+		             "text-offset": [0, 0.6],
+		             "text-anchor": "top"
+		         }
+		     });
+			}
+		var popup = new mapboxgl.Popup({
+    closeButton: false,
+    closeOnClick: false
+});
+
+		map.on('mousemove', function(e) {
+		    var features = map.queryRenderedFeatures(e.point, { layers: ['places'] });
+		    // Change the cursor style as a UI indicator.
+		    map.getCanvas().style.cursor = (features.length) ? 'pointer' : '';
+
+		    if (!features.length) {
+		        popup.remove();
+		        return;
+		    }
+
+		    var feature = features[0];
+
+		    // Populate the popup and set its coordinates
+		    // based on the feature found.
+		    popup.setLngLat(feature.geometry.coordinates)
+
+						.setHTML(`
+								<h3>${feature.properties.NOM}</h3>
+								<h5>(${feature.properties.TYPE})</h5>
+								<p> Adresse: ${feature.properties.ADRESSE} <br>
+								Arondissement: ${feature.properties.ARRONDISSE} </p>
+						`)
+		        .addTo(map);
+		});
+		</script>
+
+	</body>
+</html>

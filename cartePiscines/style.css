@@ -1,0 +1,112 @@
+body {
+    background-color: #f1f1f1;
+    font-family: 'Titillium Web', sans-serif; /* pas dans container au cas où on chance qqch */
+}
+.container {
+    width: 90%;
+    max-width: 1024px;
+    margin: auto;
+}
+#header {
+  text-align: center;
+}
+
+#header h1 {
+  font-size: 60px;
+  margin-top: 40px;
+  margin-bottom: 20px;
+}
+
+#buttonLoc {
+  margin: 20px 0px;
+  padding: 10px 20px;
+  color: #ffffff;
+  font-size: 20px;
+  background-color: #555555;
+  border-radius: 12px;
+  cursor: pointer;
+  border: none
+}
+
+#buttonLoc:hover{
+  background-color: #111;
+}
+
+#buttonLoc:focus{
+  outline: none;
+
+}
+.centerText {
+  text-align: center;
+}
+
+.map-container {
+  position: relative;
+  width: 100%;
+  height: 0;
+  padding-bottom: 56.25%;
+}
+
+#map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  outline: none;
+}
+
+.affichage h3 {
+  margin-bottom: 5px;
+}
+
+.containerPic {
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: space-around;
+}
+
+.pic {
+  position: relative;
+  width: 33.333333333%;
+  min-height: 280px;
+  background-size: cover;
+}
+
+.overlay {
+  position: absolute;
+  background-color: rgba(0,0,0,0.4);
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  font-size : 56px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#pic1 {
+  background-image: url("piscine.jpg");
+}
+
+#pic2 {
+  background-image: url("tennis.jpg");
+}
+
+#pic3 {
+  background-image: url("baseball.jpg");
+}
+
+#pic4 {
+  background-image: url("soccer.jpeg");
+}
+
+#pic5 {
+  background-image: url("patinoire.jpg");
+}
+
+#pic6 {
+  background-image: url("football.jpg");
+}
